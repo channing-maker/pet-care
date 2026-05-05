@@ -805,7 +805,7 @@ function FiveStarRatingIcon() {
 
   return (
     <svg
-      className="h-6 w-10"
+      className="h-8 w-14 text-[#facc15]"
       viewBox="0 0 120 24"
       fill="currentColor"
       stroke="currentColor"
