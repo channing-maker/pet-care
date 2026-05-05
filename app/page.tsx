@@ -20,21 +20,21 @@ const services = [
     copy: "按脸型、体型和日常打理习惯设计造型，包含全身修剪与细节圆润处理。",
     price: "¥168",
     tone: "bg-[#f3fbf7]",
-    icon: <StylingIcon />,
+    icon: <FiveStarRatingIcon />,
   },
   {
     title: "皮毛 SPA",
     copy: "针对干燥、换毛和轻度敏感毛况，提供低刺激浴液与保湿修护方案。",
     price: "¥128",
     tone: "bg-[#fff7ea]",
-    icon: <SpaIcon />,
+    icon: <FiveStarRatingIcon />,
   },
   {
     title: "牙耳爪护理",
     copy: "洁耳、剪指甲、磨甲、口腔清洁和泪痕基础护理，可单项加购。",
     price: "¥39",
     tone: "bg-[#fff1ed]",
-    icon: <CareIcon />,
+    icon: <FiveStarRatingIcon />,
   },
 ];
 
@@ -468,7 +468,7 @@ function ServicesSection() {
               )}
               key={service.title}
             >
-              <div className="mb-[18px] grid size-12 place-items-center rounded-[8px] bg-[#1c887d1f] text-[#1c887d]">
+              <div className="mb-[18px] grid h-12 w-20 place-items-center rounded-[8px] bg-[#1c887d1f] text-[#1c887d]">
                 {service.icon}
               </div>
               <h3 className="mb-2 text-[1.22rem] font-bold">
@@ -817,38 +817,6 @@ function FiveStarRatingIcon() {
       {[0, 24, 48, 72, 96].map((offset) => (
         <path d={starPath} transform={`translate(${offset})`} key={offset} />
       ))}
-    </svg>
-  );
-}
-
-function StylingIcon() {
-  return (
-    <svg className="size-[26px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M14.5 4.5 19 9" />
-      <path d="M5 19 19 5" />
-      <path d="M7 7a3 3 0 0 1 4 4" />
-      <path d="M13 13a3 3 0 0 0 4 4" />
-    </svg>
-  );
-}
-
-function SpaIcon() {
-  return (
-    <svg className="size-[26px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M12 3c2.5 3.3 5 6.1 5 10a5 5 0 0 1-10 0c0-3.9 2.5-6.7 5-10Z" />
-      <path d="M8.5 14.5a3.5 3.5 0 0 0 7 0" />
-    </svg>
-  );
-}
-
-function CareIcon() {
-  return (
-    <svg className="size-[26px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M10 2v4" />
-      <path d="M14 2v4" />
-      <path d="M7 6h10l-1 14H8L7 6Z" />
-      <path d="M9 10h6" />
-      <path d="M9 14h6" />
     </svg>
   );
 }
