@@ -352,8 +352,12 @@ function HeroCanvas() {
 
 function BookingSection() {
   const [message, setMessage] = useState("");
+  const [messageTone, setMessageTone] = useState<"success" | "error">(
+    "success",
+  );
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const form = event.currentTarget;
@@ -361,11 +365,42 @@ function BookingSection() {
     const petType = String(data.get("petType") || "");
     const service = String(data.get("service") || "");
     const date = String(data.get("date") || "");
+    const phone = String(data.get("phone") || "");
 
-    setMessage(
-      `已收到 ${petType} 的「${service}」预约需求，门店会在 ${date} 前后与您确认具体时间。`,
-    );
-    form.reset();
+    setIsSubmitting(true);
+    setMessage("");
+
+    try {
+      const response = await fetch("/api/appointments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ petType, service, date, phone }),
+      });
+      const result = (await response.json().catch(() => null)) as {
+        error?: string;
+        message?: string;
+      } | null;
+
+      if (!response.ok) {
+        setMessageTone("error");
+        setMessage(result?.error || "预约提交失败，请稍后再试。");
+        return;
+      }
+
+      setMessageTone("success");
+      setMessage(
+        result?.message ||
+          `已收到 ${petType} 的「${service}」预约需求，门店会在 ${date} 前后与您确认具体时间。`,
+      );
+      form.reset();
+    } catch {
+      setMessageTone("error");
+      setMessage("网络连接不稳定，请稍后再试或直接电话联系。");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -416,13 +451,18 @@ function BookingSection() {
             <input type="tel" name="phone" placeholder="手机号" required />
           </BookingField>
           <button
-            className="min-h-[58px] cursor-pointer rounded-[8px] border-0 bg-[#f7b84b] px-[18px] font-black text-[#261a05] max-[980px]:col-span-full"
+            className="min-h-[58px] cursor-pointer rounded-[8px] border-0 bg-[#f7b84b] px-[18px] font-black text-[#261a05] transition disabled:cursor-not-allowed disabled:opacity-65 max-[980px]:col-span-full"
+            disabled={isSubmitting}
             type="submit"
           >
-            提交
+            {isSubmitting ? "提交中" : "提交"}
           </button>
           <p
-            className="col-span-full mt-0.5 mb-0 min-h-[22px] text-[0.9rem] text-[#9ddfd3]"
+            className={cx(
+              "col-span-full mt-0.5 mb-0 min-h-[22px] text-[0.9rem]",
+              messageTone === "success" ? "text-[#9ddfd3]" : "text-[#ffb8a9]",
+            )}
+            aria-live="polite"
             role="status"
           >
             {message}
